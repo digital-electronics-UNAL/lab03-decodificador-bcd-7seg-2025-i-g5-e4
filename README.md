@@ -40,6 +40,7 @@ Indice:
 Para la descripción del convertidor BCD en FPGA, finalmente optamos por implementar el algoritmo Double Dabble en lugar del método visto en clase. La principal razón es que, aunque era la manera más rápida, al intentar pasarlo a la FPGA nos percatamos de que consumía demasiados recursos por usar operaciones complejas. El Double Dabble, en cambio, nos permitió hacer la conversión usando solo desplazamientos de bits y algunas comparaciones, lo que lo hace ideal para hardware. La implementación resultó mucho más eficiente además de que ocupa menos espacio en la FPGA, el tiempo de conversión es constante y además podemos adaptarlo fácilmente si necesitamos trabajar con números más grandes. Al final, aunque el método de clase era ideal para tener mayor entendimiento del funcionamiento práctico del BCD, para un proyecto real en FPGA el Double Dabble demostró ser la solución más práctica y eficiente
 
 ## Conclusiones
+- l algoritmo Double Dabble demostró ser ideal para implementar el convertidor BCD en FPGA por su eficiencia al usar solo desplazamientos y comparaciones. Logramos un diseño que consume pocos recursos,  consistentes y es fácil de implementar posiblemente en nuestro proyecto final, además Los resultados mostraron en todas las pruebas realizadas buenos resultados, confirmando su efectividad para este tipo de aplicaciones en hardware programable.
 
 
 

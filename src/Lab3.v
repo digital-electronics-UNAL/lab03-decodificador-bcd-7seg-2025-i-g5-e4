@@ -12,10 +12,10 @@ module Lab3 (
     wire Cout;
 
     wire [1:0] sel_disp;
-    reg [8:0] digito;
-    wire [3:0] bcd;
+    wire [3:0] BCD0, BCD1, BCD2;
+    reg [3:0] bcd;
 
-    // Inversión de señales por lógica negada (switches activos en 0)
+    // Inversión de entradas para lógica negada → lógica normal
     wire [7:0] A_in = ~A;
     wire [7:0] B_in = ~B;
     wire Sel_real = ~Sel;
@@ -26,6 +26,14 @@ module Lab3 (
         .Sel(Sel_real),
         .S(S),
         .Cout(Cout)
+    );
+
+    // 9-bit resultado = {Cout, S}
+    BCD conversor (
+        .bin({Cout, S}),
+        .BCD0(BCD0),
+        .BCD1(BCD1),
+        .BCD2(BCD2)
     );
 
     DivFrec div_clk (
@@ -41,19 +49,12 @@ module Lab3 (
 
     always @(*) begin
         case (sel_disp)
-            2'b00: digito = {5'd0, S[3:0]};   // unidades
-            2'b01: digito = {5'd0, S[7:4]};   // decenas
-            2'b10: digito = {8'd0, Cout};     // carry out
-            default: digito = 9'd0;
+            2'b00: bcd = BCD0;  // Unidades
+            2'b01: bcd = BCD1;  // Decenas
+            2'b10: bcd = BCD2;  // Centenas
+            default: bcd = 4'd0;
         endcase
     end
-
-    BCD conversor (
-        .bin(digito),
-        .BCD0(bcd),
-        .BCD1(),
-        .BCD2()
-    );
 
     BCDtoSSeg seg (
         .BCD(bcd),

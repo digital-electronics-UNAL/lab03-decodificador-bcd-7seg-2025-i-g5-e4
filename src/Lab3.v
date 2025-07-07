@@ -1,5 +1,3 @@
-
-
 module Lab3 (
     input clk,
     input [7:0] A,
@@ -14,14 +12,18 @@ module Lab3 (
     wire Cout;
 
     wire [1:0] sel_disp;
+    reg [8:0] digito;
     wire [3:0] bcd;
 
-    wire [3:0] BCD0, BCD1, BCD2;
+    // Inversión de señales por lógica negada (switches activos en 0)
+    wire [7:0] A_in = ~A;
+    wire [7:0] B_in = ~B;
+    wire Sel_real = ~Sel;
 
     sum8b sumador (
-        .A(A),
-        .B(B),
-        .Sel(Sel),
+        .A(A_in),
+        .B(B_in),
+        .Sel(Sel_real),
         .S(S),
         .Cout(Cout)
     );
@@ -37,17 +39,21 @@ module Lab3 (
         .an(an)
     );
 
-    BCD conversor (
-        .bin(S),
-        .BCD0(BCD0),
-        .BCD1(BCD1),
-        .BCD2(BCD2)
-    );
+    always @(*) begin
+        case (sel_disp)
+            2'b00: digito = {5'd0, S[3:0]};   // unidades
+            2'b01: digito = {5'd0, S[7:4]};   // decenas
+            2'b10: digito = {8'd0, Cout};     // carry out
+            default: digito = 9'd0;
+        endcase
+    end
 
-    assign bcd = (sel_disp == 2'b00) ? BCD0 :
-                 (sel_disp == 2'b01) ? BCD1 :
-                 (sel_disp == 2'b10) ? BCD2 :
-                 4'd15;
+    BCD conversor (
+        .bin(digito),
+        .BCD0(bcd),
+        .BCD1(),
+        .BCD2()
+    );
 
     BCDtoSSeg seg (
         .BCD(bcd),

@@ -1,14 +1,12 @@
-**** module/scope: SelAn
-     Flip-Flops   : 6
-     Logic Gates  : 4
-     ADDER[2]: 1 units
+**** module/scope: BCDtoSSeg
+     Flip-Flops   : 0
+     Logic Gates  : 0
      LPM[5]: 1 unaccounted
      LOG[13]: 1 unaccounted
      LOG[14]: 1 unaccounted
 **** TOTALS
-     Flip-Flops   : 6
-     Logic Gates  : 4
-     ADDER[2]: 1 units
+     Flip-Flops   : 0
+     Logic Gates  : 0
      LPM[5]: 1 unaccounted
      LOG[13]: 1 unaccounted
      LOG[14]: 1 unaccounted

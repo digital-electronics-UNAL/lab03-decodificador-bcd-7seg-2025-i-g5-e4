@@ -28,7 +28,7 @@ module Lab3 (
 
     DivFrec div_clk (
         .clk(clk),
-        .Q(clk_div)
+        .clk_out(clk_div)
     );
 
     SelAn seleccion (

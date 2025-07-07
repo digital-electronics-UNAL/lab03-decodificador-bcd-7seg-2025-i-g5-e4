@@ -1,3 +1,5 @@
+
+
 module Lab3 (
     input clk,
     input [7:0] A,
@@ -12,9 +14,9 @@ module Lab3 (
     wire Cout;
 
     wire [1:0] sel_disp;
-    reg [8:0] digito;
-
     wire [3:0] bcd;
+
+    wire [3:0] BCD0, BCD1, BCD2;
 
     sum8b sumador (
         .A(A),
@@ -26,7 +28,7 @@ module Lab3 (
 
     DivFrec div_clk (
         .clk(clk),
-        .clk_out(clk_div)
+        .Q(clk_div)
     );
 
     SelAn seleccion (
@@ -35,21 +37,17 @@ module Lab3 (
         .an(an)
     );
 
-    always @(*) begin
-        case (sel_disp)
-            2'b00: digito = {5'd0, S[3:0]};
-            2'b01: digito = {5'd0, S[7:4]};
-            2'b10: digito = {8'd0, Cout};
-            default: digito = 9'd0;
-        endcase
-    end
-
     BCD conversor (
-        .bin(digito),
-        .BCD0(bcd),
-        .BCD1(),
-        .BCD2()
+        .bin(S),
+        .BCD0(BCD0),
+        .BCD1(BCD1),
+        .BCD2(BCD2)
     );
+
+    assign bcd = (sel_disp == 2'b00) ? BCD0 :
+                 (sel_disp == 2'b01) ? BCD1 :
+                 (sel_disp == 2'b10) ? BCD2 :
+                 4'd15;
 
     BCDtoSSeg seg (
         .BCD(bcd),

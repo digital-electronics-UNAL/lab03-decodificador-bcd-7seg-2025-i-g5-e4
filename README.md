@@ -3,7 +3,9 @@
 
 
 ## Integrantes 
-
+- [José Luis Pulido Fonseca](https://github.com/jpulidof)  
+- [Nicolle Stefannie Ospina Pérez](https://github.com/stefannie4)
+- [Ana María Orozco Reyes](https://github.com/anaor17)
 
 ## Informe
 
@@ -17,10 +19,18 @@ Indice:
 6. [Conclusiones](#conclusiones)
 
 ## 1. Diseño implementado
+### Decodificador BCD a 7 segmentos
+#### Descripción
 
-### 2. Descripción
+#### Diagramas
+### Visualización Dinámica 4 Displays de 7 Segmentos
+#### Descripción
 
-### 3. Diagramas
+#### Diagramas
+### Representación decimal de números negativos
+#### Descripción
+
+#### Diagramas
 
 
 ## 4. Simulaciones 

@@ -1,12 +1,12 @@
 **** module/scope: SelAn
-     Flip-Flops   : 2
+     Flip-Flops   : 6
      Logic Gates  : 4
      ADDER[2]: 1 units
      LPM[5]: 1 unaccounted
      LOG[13]: 1 unaccounted
      LOG[14]: 1 unaccounted
 **** TOTALS
-     Flip-Flops   : 2
+     Flip-Flops   : 6
      Logic Gates  : 4
      ADDER[2]: 1 units
      LPM[5]: 1 unaccounted

@@ -1,53 +1,60 @@
-module lab3 (
+module Lab3 (
     input clk,
-    input [7:0] A, B,
-    input Cin,
-    output [6:0] seg,
+    input [7:0] A,
+    input [7:0] B,
+    input Sel,
+    output [6:0] SSeg,
     output [3:0] an
 );
 
+    wire clk_div;
     wire [7:0] S;
     wire Cout;
 
-    wire [3:0] unidad, decena, centena;
-    wire [1:0] sel;
-    wire [3:0] bcd_digit;
-    wire clk_slow;
+    wire [1:0] sel_disp;
+    reg [8:0] digito;
 
-    sum8b u_sum8b (
+    wire [3:0] bcd;
+
+    sum8b sumador (
         .A(A),
         .B(B),
-        .Cin(Cin),
+        .Sel(Sel),
         .S(S),
         .Cout(Cout)
     );
 
-    BCD u_bcd (
-        .bin(S),
-        .unidad(unidad),
-        .decena(decena),
-        .centena(centena)
-    );
-
-    DivFrec u_div (
+    DivFrec div_clk (
         .clk(clk),
-        .clk_out(clk_slow)
+        .clk_out(clk_div)
     );
 
-    SelAn u_sel (
-        .clk(clk_slow),
-        .sel(sel),
+    SelAn seleccion (
+        .clk(clk_div),
+        .sel(sel_disp),
         .an(an)
     );
 
-    assign bcd_digit = (sel == 2'b00) ? unidad :
-                       (sel == 2'b01) ? decena :
-                       (sel == 2'b10) ? centena :
-                       4'b1111;
+    always @(*) begin
+        case (sel_disp)
+            2'b00: digito = {5'd0, S[3:0]};
+            2'b01: digito = {5'd0, S[7:4]};
+            2'b10: digito = {8'd0, Cout};
+            default: digito = 9'd0;
+        endcase
+    end
 
-    BCDtoSSeg u_disp (
-        .BCD(bcd_digit),
-        .Sseg(seg)
+    BCD conversor (
+        .bin(digito),
+        .BCD0(bcd),
+        .BCD1(),
+        .BCD2()
+    );
+
+    BCDtoSSeg seg (
+        .BCD(bcd),
+        .SSeg(SSeg),
+        .an()
     );
 
 endmodule

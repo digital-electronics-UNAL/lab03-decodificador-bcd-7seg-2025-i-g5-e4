@@ -1,15 +1,13 @@
 module DivFrec(
-    input clk,
-    output reg Q
+    input clk,           
+    output reg clk_out   
 );
-    reg [17:0] count = 0;  // 18 bits alcanzan hasta 262143
+
+    reg [19:0] count = 0;
 
     always @(posedge clk) begin
-        if (count >= 199_999) begin
-            count <= 0;
-            Q <= ~Q;
-        end else begin
-            count <= count + 1;
-        end
+        count <= count + 1;
+        clk_out <= count[16];
     end
+
 endmodule

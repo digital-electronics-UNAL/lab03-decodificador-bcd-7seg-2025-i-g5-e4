@@ -1,12 +1,16 @@
-**** module/scope: BCDtoSSeg
+**** module/scope: BCD
      Flip-Flops   : 0
-     Logic Gates  : 0
-     LPM[5]: 1 unaccounted
+     Logic Gates  : 3096
+     ADDER[4]: 27 units
+     MAGNITUDE[32]: 27 units
+     MUX[2]: 567 slices
      LOG[13]: 1 unaccounted
      LOG[14]: 1 unaccounted
 **** TOTALS
      Flip-Flops   : 0
-     Logic Gates  : 0
-     LPM[5]: 1 unaccounted
+     Logic Gates  : 3096
+     ADDER[4]: 27 units
+     MAGNITUDE[32]: 27 units
+     MUX[2]: 567 slices
      LOG[13]: 1 unaccounted
      LOG[14]: 1 unaccounted

@@ -15,7 +15,7 @@ module sumres8b (
     sum8b sumador (
         .A(A),
         .B(B_xor_Sel),
-        .Sel(Sel),  // Esto se conecta como CarryIn (Ci)
+        .Ci(Sel),  // Esto se conecta como CarryIn (Ci)
         .S(Sn),
         .Cout(Coutn)
     );

@@ -8,10 +8,10 @@ module SelAn (
         sel <= sel + 1;
 
         case (sel)
-            2'b00: an <= 4'b1110; // unidades
-            2'b01: an <= 4'b1101; // decenas
-            2'b10: an <= 4'b1011; // centenas
-            2'b11: an <= 4'b0111; // signo
+            2'b00: an <= 4'b1110; // Display A
+            2'b01: an <= 4'b1101; // Display B
+            2'b10: an <= 4'b1011; // Display C
+            2'b11: an <= 4'b0111; // Display D
         endcase
     end
 

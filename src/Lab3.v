@@ -1,6 +1,6 @@
 module Lab3 (
     input clk,
-    input [7:0] A,       // Ignorados en esta prueba
+    input [7:0] A,
     input [7:0] B,
     input Sel,
     output [6:0] SSeg,
@@ -9,49 +9,35 @@ module Lab3 (
 
     wire clk_div;
     wire [1:0] sel_disp;
-    wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // 🔴 FORZAR número manualmente: 253 → Cout = 1, S = 8'b11111101
-    wire [7:0] S = 8'd253;
-    wire Cout = 1'b1;
-
-    // Binario a BCD
-    BCD conversor (
-        .bin({Cout, S}),   // 9 bits: {1, 11111101}
-        .BCD0(BCD0),
-        .BCD1(BCD1),
-        .BCD2(BCD2)
-    );
-
-    // Divisor de frecuencia
+    // ✅ Divisor de frecuencia
     DivFrec div_clk (
         .clk(clk),
         .clk_out(clk_div)
     );
 
-    // Selector de display
+    // ✅ Multiplexor de displays
     SelAn seleccion (
         .clk(clk_div),
         .sel(sel_disp),
         .an(an)
     );
 
-    // Muestra signo a la izquierda si negativo, blanco si positivo
+    // ✅ Mostrar 1, 2, 3, 4 según el display
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = BCD0;                           // unidades (3)
-            2'b01: bcd = BCD1;                           // decenas (5)
-            2'b10: bcd = BCD2;                           // centenas (2)
-            2'b11: bcd = (Cout == 1'b0) ? 4'd10 : 4'd11; // signo: '-' o blanco
+            2'b00: bcd = 4'd1; // Display A
+            2'b01: bcd = 4'd2; // Display B
+            2'b10: bcd = 4'd3; // Display C
+            2'b11: bcd = 4'd4; // Display D
         endcase
     end
 
-    // Decodificación a display de 7 segmentos
+    // ✅ Decodificador 7 segmentos
     BCDtoSSeg seg (
         .BCD(bcd),
-        .SSeg(SSeg),
-        .an()
+        .SSeg(SSeg)
     );
 
 endmodule

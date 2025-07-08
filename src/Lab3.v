@@ -1,6 +1,6 @@
 module Lab3 (
     input clk,
-    input [7:0] A,   // Ignorados en esta prueba
+    input [7:0] A,   // Ignorados
     input [7:0] B,
     input Sel,
     output [6:0] SSeg,
@@ -9,32 +9,40 @@ module Lab3 (
 
     wire clk_div;
     wire [1:0] sel_disp;
+    wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // ✅ Divisor de frecuencia
+    // ✅ Forzar manualmente resultado binario = 165
+    wire [7:0] S = 8'd165;     // valor binario equivalente al complemento a 2
+    wire Cout = 1'b0;          // negativo
+
+    BCD conversor (
+        .bin({Cout, S}),
+        .BCD0(BCD0),
+        .BCD1(BCD1),
+        .BCD2(BCD2)
+    );
+
     DivFrec div_clk (
         .clk(clk),
         .clk_out(clk_div)
     );
 
-    // ✅ Selección de display activo
     SelAn seleccion (
         .clk(clk_div),
         .sel(sel_disp),
         .an(an)
     );
 
-    // ✅ Asignar manualmente los valores para mostrar "1234"
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = 4'd4; // unidades → display derecho (4°)
-            2'b01: bcd = 4'd1; // signo → display izquierdo (1°)
-            2'b10: bcd = 4'd2; // centenas → 2°
-            2'b11: bcd = 4'd3; // decenas → 3°
+            2'b00: bcd = BCD0;                           // unidades
+            2'b01: bcd = BCD1;                           // decenas
+            2'b10: bcd = BCD2;                           // centenas
+            2'b11: bcd = (Cout == 1'b0) ? 4'd10 : 4'd11; // signo: '-' o blanco
         endcase
     end
 
-    // ✅ Decodificación a 7 segmentos
     BCDtoSSeg seg (
         .BCD(bcd),
         .SSeg(SSeg)

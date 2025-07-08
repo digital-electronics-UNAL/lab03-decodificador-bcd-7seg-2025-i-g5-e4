@@ -15,12 +15,12 @@ module Lab3 (
     wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // ✅ Lógica negada para switches
-    wire [7:0] A_in = ~A;
-    wire [7:0] B_in = ~B;
+    // ✅ Inversión de orden de bits + lógica negada para switches
+    wire [7:0] A_in = ~{A[7], A[6], A[5], A[4], A[3], A[2], A[1], A[0]};
+    wire [7:0] B_in = ~{B[7], B[6], B[5], B[4], B[3], B[2], B[1], B[0]};
     wire Sel_real = ~Sel;
 
-    // ✅ Nueva instancia con módulo sumres8b
+    // ✅ Suma/resta estructural
     sumres8b sumador (
         .A(A_in),
         .B(B_in),
@@ -29,9 +29,10 @@ module Lab3 (
         .Cout(Cout)
     );
 
-    // ✅ Convertir resultado a BCD
-    wire [8:0] abs_result = {Cout, S};  // Ya viene corregido desde sumres8b
+    // ✅ Valor absoluto del resultado de 9 bits (ya viene corregido desde sumres8b)
+    wire [8:0] abs_result = {Cout, S};
 
+    // ✅ Conversión a BCD
     BCD conversor (
         .bin(abs_result),
         .BCD0(BCD0),
@@ -39,6 +40,7 @@ module Lab3 (
         .BCD2(BCD2)
     );
 
+    // ✅ Divisor de frecuencia y rotación de displays
     DivFrec div_clk (
         .clk(clk),
         .clk_out(clk_div)
@@ -50,11 +52,11 @@ module Lab3 (
         .an(an)
     );
 
-    // ✅ Mostrar los dígitos con signo
+    // ✅ Mapeo a displays físicos: [signo] [centenas] [decenas] [unidades]
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = BCD0;                           // unidades → display derecho
-            2'b01: bcd = (Cout == 1'b0) ? 4'd10 : 4'd11; // signo    → display izquierdo
+            2'b00: bcd = BCD0;                           // unidades
+            2'b01: bcd = (Cout == 1'b0) ? 4'd10 : 4'd11; // signo
             2'b10: bcd = BCD2;                           // centenas
             2'b11: bcd = BCD1;                           // decenas
         endcase

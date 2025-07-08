@@ -15,7 +15,7 @@ module Lab3 (
     wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // Inversión por lógica negada (switches activos en bajo)
+    // Lógica negada (switches activos en bajo)
     wire [7:0] A_in = ~A;
     wire [7:0] B_in = ~B;
     wire Sel_real = ~Sel;

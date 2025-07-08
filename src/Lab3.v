@@ -1,6 +1,6 @@
 module Lab3 (
     input clk,
-    input [7:0] A,     // Ignorados para esta prueba
+    input [7:0] A,   // Ignorados en esta prueba
     input [7:0] B,
     input Sel,
     output [6:0] SSeg,
@@ -17,25 +17,24 @@ module Lab3 (
         .clk_out(clk_div)
     );
 
-    // ✅ Selector de display
+    // ✅ Selección de display activo
     SelAn seleccion (
         .clk(clk_div),
         .sel(sel_disp),
         .an(an)
     );
 
-    // ✅ Mostrar 1234 de izquierda a derecha
-    // sel_disp se asocia a: 00 = unidades, 01 = decenas, 10 = centenas, 11 = signo
+    // ✅ Asignar manualmente los valores para mostrar "1234"
     always @(*) begin
-    case (sel_disp)
-        2'b00: bcd = 4'd1; // signo → display más a la izquierda
-        2'b01: bcd = 4'd2; // centenas
-        2'b10: bcd = 4'd3; // decenas
-        2'b11: bcd = 4'd4; // unidades (display más a la derecha)
-    endcase
-end
+        case (sel_disp)
+            2'b00: bcd = 4'd4; // unidades → display derecho (4°)
+            2'b01: bcd = 4'd1; // signo → display izquierdo (1°)
+            2'b10: bcd = 4'd2; // centenas → 2°
+            2'b11: bcd = 4'd3; // decenas → 3°
+        endcase
+    end
 
-    // ✅ Decodificador BCD a 7 segmentos
+    // ✅ Decodificación a 7 segmentos
     BCDtoSSeg seg (
         .BCD(bcd),
         .SSeg(SSeg)

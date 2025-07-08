@@ -8,33 +8,53 @@ module Lab3 (
 );
 
     wire clk_div;
+    wire [7:0] S;
+    wire Cout;
+
     wire [1:0] sel_disp;
+    wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // ✅ Divisor de frecuencia
+    // Lógica negada (switches activos en bajo)
+    wire [7:0] A_in = ~A;
+    wire [7:0] B_in = ~B;
+    wire Sel_real = ~Sel;
+
+    sum8b sumador (
+        .A(A_in),
+        .B(B_in),
+        .Sel(Sel_real),
+        .S(S),
+        .Cout(Cout)
+    );
+
+    BCD conversor (
+        .bin({Cout, S}),
+        .BCD0(BCD0),
+        .BCD1(BCD1),
+        .BCD2(BCD2)
+    );
+
     DivFrec div_clk (
         .clk(clk),
         .clk_out(clk_div)
     );
 
-    // ✅ Multiplexor de displays
     SelAn seleccion (
         .clk(clk_div),
         .sel(sel_disp),
         .an(an)
     );
 
-    // ✅ Mostrar 1, 2, 3, 4 según el display
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = 4'd1; // Display A
-            2'b01: bcd = 4'd2; // Display B
-            2'b10: bcd = 4'd3; // Display C
-            2'b11: bcd = 4'd4; // Display D
+            2'b00: bcd = BCD0;                           // unidades
+            2'b01: bcd = BCD1;                           // decenas
+            2'b10: bcd = BCD2;                           // centenas
+            2'b11: bcd = (Cout == 1'b0) ? 4'd10 : 4'd11; // signo: '-' o blanco
         endcase
     end
 
-    // ✅ Decodificador 7 segmentos
     BCDtoSSeg seg (
         .BCD(bcd),
         .SSeg(SSeg)

@@ -1,7 +1,6 @@
 module BCDtoSSeg (
     input [3:0] BCD,
-    output reg [6:0] SSeg,
-    output [3:0] an
+    output reg [6:0] SSeg
 );
 
     always @(*) begin
@@ -16,7 +15,7 @@ module BCDtoSSeg (
             4'd7:  SSeg = 7'b1111000;
             4'd8:  SSeg = 7'b0000000;
             4'd9:  SSeg = 7'b0010000;
-            4'd10: SSeg = 7'b0111111; // segmento g encendido: guion '-'
+            4'd10: SSeg = 7'b0111111; // guion '-'
             4'd11: SSeg = 7'b1111111; // blanco
             default: SSeg = 7'b1111111;
         endcase

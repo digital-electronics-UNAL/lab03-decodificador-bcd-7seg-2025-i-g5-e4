@@ -1,22 +1,24 @@
 module Lab3 (
     input clk,
-    input [7:0] A,
-    input [7:0] B,
-    input Sel,                // Switch de suma/resta
+    input [7:0] A,    // Ignorados en esta prueba
+    input [7:0] B,    // Ignorados en esta prueba
+    input Sel,        // Ignorado en esta prueba
     output [6:0] SSeg,
     output [3:0] an
 );
 
     wire [8:0] resultado;
 
-    // ✅ Inversión opcional de Sel (activo en bajo si es necesario)
-    wire Sel_real = ~Sel;  // Cambia a "Sel" si tu switch ya es activo en alto
+    // ✅ Fuerza A, B y Sel a valores de prueba
+    wire [7:0] A_in = 8'b00000000;
+    wire [7:0] B_in = 8'b00000000;
+    wire Sel_in = 1'b0; // suma
 
-    // ✅ Instanciar sumador
+    // ✅ Calcula resultado real (con sumador corregido)
     Sumador9b alu (
-        .A(A),
-        .B(B),
-        .Sel(Sel_real),
+        .A(A_in),
+        .B(B_in),
+        .Sel(Sel_in),
         .resultado(resultado)
     );
 

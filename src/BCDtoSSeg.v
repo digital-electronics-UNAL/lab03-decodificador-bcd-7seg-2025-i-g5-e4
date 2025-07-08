@@ -1,8 +1,9 @@
-module BCDtoSSeg(
+module BCDtoSSeg (
     input [3:0] BCD,
     output reg [6:0] SSeg,
-    output [3:0] an  // puedes ignorarlo si no se usa
+    output [3:0] an  // opcional: puede ignorarse si ya lo manejas por fuera
 );
+
     always @(*) begin
         case (BCD)
             4'd0:  SSeg = 7'b1000000;
@@ -15,9 +16,10 @@ module BCDtoSSeg(
             4'd7:  SSeg = 7'b1111000;
             4'd8:  SSeg = 7'b0000000;
             4'd9:  SSeg = 7'b0010000;
-            4'd10: SSeg = 7'b1111110;  // '-'
-            4'd11: SSeg = 7'b1111111;  // blanco
+            4'd10: SSeg = 7'b1111110; // '-'
+            4'd11: SSeg = 7'b1111111; // blanco
             default: SSeg = 7'b1111111;
         endcase
     end
+
 endmodule

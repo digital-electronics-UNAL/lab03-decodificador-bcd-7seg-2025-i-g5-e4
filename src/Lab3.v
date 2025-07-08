@@ -2,7 +2,7 @@ module Lab3 (
     input clk,
     input [7:0] A,
     input [7:0] B,
-    input Sel,
+    input Sel, 
     output [6:0] SSeg,
     output [3:0] an
 );
@@ -15,10 +15,10 @@ module Lab3 (
     wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // ✅ Lógica negada sin invertir el orden de los bits
-    wire [7:0] A_in = ~A;
-    wire [7:0] B_in = ~B;
-    wire Sel_real = ~Sel;
+    // ✅ Lógica negada + inversión de bits (orden físico invertido confirmado)
+    wire [7:0] A_in = ~{A[7], A[6], A[5], A[4], A[3], A[2], A[1], A[0]};
+    wire [7:0] B_in = ~{B[7], B[6], B[5], B[4], B[3], B[2], B[1], B[0]};
+    wire Sel_real = 1'b0; 
 
     sumres8b sumador (
         .A(A_in),
@@ -50,10 +50,10 @@ module Lab3 (
 
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = BCD0;                           // unidades
-            2'b01: bcd = (Cout == 1'b0) ? 4'd10 : 4'd11; // signo
-            2'b10: bcd = BCD2;                           // centenas
-            2'b11: bcd = BCD1;                           // decenas
+            2'b00: bcd = BCD0;
+            2'b01: bcd = 4'd11; // blanco (ignora signo)
+            2'b10: bcd = BCD2;
+            2'b11: bcd = BCD1;
         endcase
     end
 

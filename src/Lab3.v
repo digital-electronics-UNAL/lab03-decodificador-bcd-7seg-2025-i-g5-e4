@@ -15,12 +15,12 @@ module Lab3 (
     wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // Lógica negada para switches
+    // 🔁 Lógica negada para switches
     wire [7:0] A_in = ~A;
     wire [7:0] B_in = ~B;
     wire Sel_real = ~Sel;
 
-    // Sumador/restador
+    // ✅ Operación A ± B
     sum8b sumador (
         .A(A_in),
         .B(B_in),
@@ -29,16 +29,19 @@ module Lab3 (
         .Cout(Cout)
     );
 
-    // 🔍 Mostrar directamente el valor bruto sin corregir signo
+    // ✅ Convertir complemento a 2 → magnitud decimal si negativo
     wire [8:0] raw_result = {Cout, S};
+    wire [8:0] abs_result = (Cout == 1'b0) ? (~raw_result + 1'b1) : raw_result;
 
+    // ✅ Binario a BCD
     BCD conversor (
-        .bin(raw_result),
+        .bin(abs_result),
         .BCD0(BCD0),
         .BCD1(BCD1),
         .BCD2(BCD2)
     );
 
+    // ✅ Divisor de frecuencia y rotación de displays
     DivFrec div_clk (
         .clk(clk),
         .clk_out(clk_div)
@@ -50,13 +53,13 @@ module Lab3 (
         .an(an)
     );
 
-    // Mostrar el número decimal sin importar el signo
+    // ✅ Mostrar según orden físico confirmado: 2341
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = BCD0;       // unidades
-            2'b01: bcd = BCD1;       // decenas
-            2'b10: bcd = BCD2;       // centenas
-            2'b11: bcd = 4'd11;      // blanco (sin signo)
+            2'b00: bcd = BCD0;                           // unidades → display derecho
+            2'b01: bcd = (Cout == 1'b0) ? 4'd10 : 4'd11; // signo     → display izquierdo
+            2'b10: bcd = BCD2;                           // centenas
+            2'b11: bcd = BCD1;                           // decenas
         endcase
     end
 

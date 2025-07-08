@@ -2,7 +2,7 @@ module Lab3 (
     input clk,
     input [7:0] A,
     input [7:0] B,
-    input Sel, // Ignorado en esta versión
+    input Sel, // Ignorado
     output [6:0] SSeg,
     output [3:0] an
 );
@@ -15,12 +15,12 @@ module Lab3 (
     wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // ✅ Corrige desplazamiento de bits con lógica negada
-    wire [7:0] A_in = ~{A[6:0], 1'b0};
-    wire [7:0] B_in = ~{B[6:0], 1'b0};
+    // ✅ Lógica negada + relleno manual de MSB (A[7] = 0)
+    wire [7:0] A_in = ~{1'b0, A[7:1]};
+    wire [7:0] B_in = ~{1'b0, B[7:1]};
     wire Sel_real = 1'b0; // suma forzada
 
-    // ✅ Sumador/restador estructural
+    // ✅ Sumador estructural
     sumres8b sumador (
         .A(A_in),
         .B(B_in),
@@ -31,7 +31,7 @@ module Lab3 (
 
     wire [8:0] abs_result = {Cout, S};
 
-    // ✅ Conversión binario a BCD
+    // ✅ Conversión a BCD
     BCD conversor (
         .bin(abs_result),
         .BCD0(BCD0),
@@ -39,30 +39,30 @@ module Lab3 (
         .BCD2(BCD2)
     );
 
-    // ✅ División de frecuencia para multiplexar displays
+    // ✅ División de frecuencia
     DivFrec div_clk (
         .clk(clk),
         .clk_out(clk_div)
     );
 
-    // ✅ Selección de anodo activo
+    // ✅ Rotación de displays
     SelAn seleccion (
         .clk(clk_div),
         .sel(sel_disp),
         .an(an)
     );
 
-    // ✅ Asignación por display físico: [signo][centenas][decenas][unidades]
+    // ✅ Asignación de dígitos por display: [signo][centenas][decenas][unidades]
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = BCD0;       // unidades
-            2'b01: bcd = 4'd11;      // blanco (sin signo)
-            2'b10: bcd = BCD2;       // centenas
-            2'b11: bcd = BCD1;       // decenas
+            2'b00: bcd = BCD0;
+            2'b01: bcd = 4'd11; // blanco
+            2'b10: bcd = BCD2;
+            2'b11: bcd = BCD1;
         endcase
     end
 
-    // ✅ Decodificador BCD a display 7 segmentos
+    // ✅ Decodificador a display 7 segmentos
     BCDtoSSeg seg (
         .BCD(bcd),
         .SSeg(SSeg)

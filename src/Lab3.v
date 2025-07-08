@@ -2,33 +2,23 @@ module Lab3 (
     input clk,
     input [7:0] A,
     input [7:0] B,
-    input Sel, // Ignorado
+    input Sel, // ignorado
     output [6:0] SSeg,
     output [3:0] an
 );
 
     wire clk_div;
-    wire [7:0] A_reord, B_reord;
-    wire [7:0] A_in, B_in;
     wire [7:0] S;
     wire Cout;
-
-    wire [8:0] abs_result = {Cout, S};
 
     wire [1:0] sel_disp;
     wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // ✅ Reordenar bits (bit 7 no conectado → se pone en 0)
-    reordenar rA (.in(A), .out(A_reord));
-    reordenar rB (.in(B), .out(B_reord));
-
-    // ✅ Aplicar lógica negada (switches activos en bajo)
-    assign A_in = ~A_reord;
-    assign B_in = ~B_reord;
-
-    // ✅ Suma forzada
-    wire Sel_real = 1'b0;
+    // ✅ Solo lógica negada (sin inversión de orden de bits)
+    wire [7:0] A_in = ~A;
+    wire [7:0] B_in = ~B;
+    wire Sel_real = 1'b0; // suma forzada
 
     sumres8b sumador (
         .A(A_in),
@@ -37,6 +27,8 @@ module Lab3 (
         .S(S),
         .Cout(Cout)
     );
+
+    wire [8:0] abs_result = {Cout, S};
 
     BCD conversor (
         .bin(abs_result),

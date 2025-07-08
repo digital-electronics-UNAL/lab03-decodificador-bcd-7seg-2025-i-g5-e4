@@ -15,12 +15,11 @@ module Lab3 (
     wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // ✅ Inversión de orden de bits + lógica negada para switches
-    wire [7:0] A_in = ~{A[7], A[6], A[5], A[4], A[3], A[2], A[1], A[0]};
-    wire [7:0] B_in = ~{B[7], B[6], B[5], B[4], B[3], B[2], B[1], B[0]};
+    // ✅ Lógica negada sin invertir el orden de los bits
+    wire [7:0] A_in = ~A;
+    wire [7:0] B_in = ~B;
     wire Sel_real = ~Sel;
 
-    // ✅ Suma/resta estructural
     sumres8b sumador (
         .A(A_in),
         .B(B_in),
@@ -29,10 +28,8 @@ module Lab3 (
         .Cout(Cout)
     );
 
-    // ✅ Valor absoluto del resultado de 9 bits (ya viene corregido desde sumres8b)
     wire [8:0] abs_result = {Cout, S};
 
-    // ✅ Conversión a BCD
     BCD conversor (
         .bin(abs_result),
         .BCD0(BCD0),
@@ -40,7 +37,6 @@ module Lab3 (
         .BCD2(BCD2)
     );
 
-    // ✅ Divisor de frecuencia y rotación de displays
     DivFrec div_clk (
         .clk(clk),
         .clk_out(clk_div)
@@ -52,7 +48,6 @@ module Lab3 (
         .an(an)
     );
 
-    // ✅ Mapeo a displays físicos: [signo] [centenas] [decenas] [unidades]
     always @(*) begin
         case (sel_disp)
             2'b00: bcd = BCD0;                           // unidades

@@ -27,13 +27,13 @@ module Lab3 (
     // ✅ Mostrar 1234 de izquierda a derecha
     // sel_disp se asocia a: 00 = unidades, 01 = decenas, 10 = centenas, 11 = signo
     always @(*) begin
-        case (sel_disp)
-            2'b00: bcd = 4'd4; // unidades
-            2'b01: bcd = 4'd3; // decenas
-            2'b10: bcd = 4'd2; // centenas
-            2'b11: bcd = 4'd1; // signo (aquí solo mostramos "1" para esta prueba)
-        endcase
-    end
+    case (sel_disp)
+        2'b00: bcd = 4'd1; // signo → display más a la izquierda
+        2'b01: bcd = 4'd2; // centenas
+        2'b10: bcd = 4'd3; // decenas
+        2'b11: bcd = 4'd4; // unidades (display más a la derecha)
+    endcase
+end
 
     // ✅ Decodificador BCD a 7 segmentos
     BCDtoSSeg seg (

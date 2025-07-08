@@ -20,7 +20,7 @@ Indice:
 
 ## 1. Diseño implementado
 ### Decodificador BCD a 7 segmentos
-#### Descripción estrcutural
+#### Descripción estructural
 El sistema completo está compuesto por dos módulos:
 - BCD: Convierte un número binario de 9 bits (valor entre 0 y 511) en tres dígitos BCD de 4 bits cada uno.
 - BCDtoSSeg: Convierte un valor BCD de 4 bits (0–15) al código correspondiente para controlar un display de 7 segmentos.
@@ -44,6 +44,54 @@ BCD2 = shift_reg[19:16]
 #### Diagramas
 ### Visualización Dinámica 4 Displays de 7 Segmentos
 #### Descripción
+Este repositorio contiene tres módulos escritos en Verilog que forman parte de un sistema para mostrar números en displays de 7 segmentos con multiplexación. Los módulos incluidos son:
+
+
+- Módulo `DivFrec`
+
+##### Descripción estructural
+Este módulo actúa como un **divisor de frecuencia**. Su salida `clk_out` se deriva de un bit inferior del contador interno, generando una señal más lenta que la señal de entrada `clk`.
+##### Descripción comportamental
+Entrada:
+clk: Reloj principal del sistema.
+
+Salida:
+clk_out: Reloj dividido (frecuencia más baja).
+
+- Módulo SelAn
+##### Descripción estructural
+Este módulo se encarga de seleccionar uno de los cuatro displays de 7 segmentos activando su correspondiente anodo (an). Utiliza un contador de 2 bits (sel) para rotar entre displays en cada ciclo de reloj.
+Aumenta un contador de 20 bits en cada flanco positivo de clk.
+Usa el bit count[16] como reloj de salida, lo que efectivamente divide la frecuencia original por 2^17.
+##### Descripción comportamental
+Entradas:
+clk: Señal de reloj (de baja frecuencia, idealmente proveniente de DivFrec).
+
+Salidas:
+sel: Contador interno que rota cada flanco de reloj.
+an: Señal de activación para los anodos de los displays.
+
+En cada flanco de subida del reloj, el módulo incrementa sel.
+El valor de sel determina qué display se activa mediante an.
+
+
+- Módulo SelBCD
+##### Descripción Estructural
+Este módulo selecciona un dígito BCD (DIP_BCD) para ser visualizado en un display de 7 segmentos. También selecciona cuál de los cuatro displays debe activarse, de acuerdo con el valor de DIP_SEL.
+
+##### Descripción comportamental
+Entradas:
+DIP_BCD[3:0]: Dígito BCD a mostrar (0–15).
+DIP_SEL[1:0]: Selección del display activo.
+
+Salidas:
+SSeg[0:6]: Señal para controlar los 7 segmentos (a–g).
+an[3:0]: Señal de activación para displays.
+
+
+Usa el módulo BCDtoSSeg para convertir DIP_BCD en señal para display y controla cuál display debe activarse según DIP_SEL.
+
+
 
 #### Diagramas
 ### Representación decimal de números negativos

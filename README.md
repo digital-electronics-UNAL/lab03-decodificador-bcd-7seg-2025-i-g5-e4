@@ -20,7 +20,26 @@ Indice:
 
 ## 1. Diseño implementado
 ### Decodificador BCD a 7 segmentos
-#### Descripción
+#### Descripción estrcutural
+El sistema completo está compuesto por dos módulos:
+- BCD: Convierte un número binario de 9 bits (valor entre 0 y 511) en tres dígitos BCD de 4 bits cada uno.
+- BCDtoSSeg: Convierte un valor BCD de 4 bits (0–15) al código correspondiente para controlar un display de 7 segmentos.
+Las salidas BCD0, BCD1 y BCD2 del módulo BCD se conectan como entradas (una a la vez) al módulo BCDtoSSeg para mostrarlas en un display (mediante multiplexación).
+#### Descripción comportamental
+Este módulo se encarga de traducir un dígito BCD (4 bits) en una señal de control para un display de 7 segmentos común anodo. El comportamiento se describe con una estructura case.
+
+El módulo BCD realiza la conversión de binario puro a BCD usando el algoritmo de doble desplazamiento y suma de 3, también conocido como “Double Dabble”.
+- Se inicializa un registro de desplazamiento (shift_reg) de 21 bits y se cargan los 9 bits binarios en las posiciones más bajas.
+
+- Se repite 9 veces:
+Si las secciones que representan centenas, decenas o unidades son mayores o iguales a 5, se les suma 3 (requisito del algoritmo).
+Se realiza un desplazamiento a la izquierda de todo el registro.
+
+-Finalmente, se extraen los valores BCD desde las posiciones correspondientes:
+BCD0 = shift_reg[11:8]
+BCD1 = shift_reg[15:12]
+BCD2 = shift_reg[19:16]
+
 
 #### Diagramas
 ### Visualización Dinámica 4 Displays de 7 Segmentos

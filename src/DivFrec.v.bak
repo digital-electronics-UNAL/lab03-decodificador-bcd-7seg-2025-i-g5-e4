@@ -1,6 +1,6 @@
 module DivFrec(
-    input clk,
-    output reg clk_out
+    input clk,           
+    output reg clk_out   
 );
 
     reg [19:0] count = 0;

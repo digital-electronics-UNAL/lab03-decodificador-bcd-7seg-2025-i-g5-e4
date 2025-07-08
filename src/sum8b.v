@@ -1,7 +1,7 @@
 module sum8b (
     input [7:0] A,
     input [7:0] B,
-    input Sel,             // 0: suma, 1: resta
+    input Sel,
     output [7:0] S,
     output Cout
 );
@@ -9,12 +9,11 @@ module sum8b (
     wire [7:0] B_mux;
     wire Cin;
 
-    assign B_mux = Sel ? ~B : B;
-    assign Cin = Sel ? 1'b1 : 1'b0;
+    assign B_mux = B ^ {8{Sel}};
+    assign Cin = Sel;
 
     wire [7:0] carry;
 
-    
     sum1b b0 (A[0], B_mux[0], Cin     , S[0], carry[0]);
     sum1b b1 (A[1], B_mux[1], carry[0], S[1], carry[1]);
     sum1b b2 (A[2], B_mux[2], carry[1], S[2], carry[2]);

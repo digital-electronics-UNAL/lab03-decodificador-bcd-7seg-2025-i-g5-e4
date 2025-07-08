@@ -1,15 +1,19 @@
 module sum1b (
-    input A,
-    input B,
+    input A, 
+    input B, 
     input Ci,
-    output S,
-    output Cout
-);
-    wire ab_xor, ab_and, carry_aux;
-
-    xor (ab_xor, A, B);
-    xor (S, ab_xor, Ci);
-    and (ab_and, A, B);
-    and (carry_aux, ab_xor, Ci);
-    or  (Cout, ab_and, carry_aux);
-endmodule
+    output Cout,
+    output S
+  );
+  
+    wire a_ab;
+    wire x_ab;
+    wire cout_t;
+  
+    and(a_ab,A,B); 
+    xor(S,x_ab,Ci);
+    xor(x_ab,A,B);
+    and(cout_t,x_ab,Ci);
+    or (Cout,cout_t,a_ab);
+  
+  endmodule

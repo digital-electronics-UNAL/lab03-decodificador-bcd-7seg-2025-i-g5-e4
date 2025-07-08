@@ -2,65 +2,32 @@ module Lab3 (
     input clk,
     input [7:0] A,
     input [7:0] B,
-    input Sel, // Ignorado (forzado a suma)
+    input Sel,
     output [6:0] SSeg,
     output [3:0] an
 );
 
-    wire clk_div;
-    wire [7:0] S;
-    wire Cout;
-
-    wire [1:0] sel_disp;
-    wire [3:0] BCD0, BCD1, BCD2;
-    reg [3:0] bcd;
-
-    // ✅ Corrige corrimiento: solo se usa A[6:0] y B[6:0], y agrega un 0 como MSB
+    // === Ajuste de entradas (corrección de lógica negada y corrimiento)
     wire [7:0] A_in = ~{A[6:0], 1'b0};
     wire [7:0] B_in = ~{B[6:0], 1'b0};
+    wire Sel_real = ~Sel;
 
-    wire Sel_real = 1'b0; // suma forzada
+    // === Resultado firmado de 9 bits
+    wire [8:0] resultado;
 
-    sumres8b sumador (
+    Sumador9b alu (
         .A(A_in),
         .B(B_in),
         .Sel(Sel_real),
-        .S(S),
-        .Cout(Cout)
+        .resultado(resultado)
     );
 
-    wire [8:0] abs_result = {Cout, S};
-
-    BCD conversor (
-        .bin(abs_result),
-        .BCD0(BCD0),
-        .BCD1(BCD1),
-        .BCD2(BCD2)
-    );
-
-    DivFrec div_clk (
+    // === Mostrar en displays
+    Display visor (
         .clk(clk),
-        .clk_out(clk_div)
-    );
-
-    SelAn seleccion (
-        .clk(clk_div),
-        .sel(sel_disp),
+        .resultado(resultado),
+        .SSeg(SSeg),
         .an(an)
-    );
-
-    always @(*) begin
-        case (sel_disp)
-            2'b00: bcd = BCD0;       // unidades
-            2'b01: bcd = 4'd11;      // blanco
-            2'b10: bcd = BCD2;       // centenas
-            2'b11: bcd = BCD1;       // decenas
-        endcase
-    end
-
-    BCDtoSSeg seg (
-        .BCD(bcd),
-        .SSeg(SSeg)
     );
 
 endmodule

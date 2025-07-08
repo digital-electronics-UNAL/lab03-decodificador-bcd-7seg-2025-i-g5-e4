@@ -15,12 +15,12 @@ module Lab3 (
     wire [3:0] BCD0, BCD1, BCD2;
     reg [3:0] bcd;
 
-    // Inversión de entradas por lógica negada (switches arriba = 0 lógico real)
+    // Inversión por lógica negada
     wire [7:0] A_in = ~A;
     wire [7:0] B_in = ~B;
     wire Sel_real = ~Sel;
 
-    // Sumador/restador de 8 bits
+    // Sumador/restador
     sum8b sumador (
         .A(A_in),
         .B(B_in),
@@ -29,7 +29,7 @@ module Lab3 (
         .Cout(Cout)
     );
 
-    // Conversor de binario (9 bits) a BCD (3 dígitos)
+    // Binario (9 bits) a BCD
     BCD conversor (
         .bin({Cout, S}),
         .BCD0(BCD0),
@@ -37,30 +37,30 @@ module Lab3 (
         .BCD2(BCD2)
     );
 
-    // Divisor de frecuencia para visualización dinámica
+    // Reloj lento para multiplexar displays
     DivFrec div_clk (
         .clk(clk),
         .clk_out(clk_div)
     );
 
-    // Selección de display activo (multiplexado)
+    // Selector de display
     SelAn seleccion (
         .clk(clk_div),
         .sel(sel_disp),
         .an(an)
     );
 
-    // Selección del dígito BCD a mostrar según el display activo
+    // Selección del dígito BCD según display activo
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = BCD0;  // Unidades
-            2'b01: bcd = BCD1;  // Decenas
-            2'b10: bcd = BCD2;  // Centenas
-            default: bcd = 4'd0;
+            2'b00: bcd = BCD0;
+            2'b01: bcd = BCD1;
+            2'b10: bcd = BCD2;
+            2'b11: bcd = 4'd15;  // Mostrar "F" (opcional: apagar)
         endcase
     end
 
-    // Conversor de BCD a segmentos para display de 7 segmentos
+    // BCD a 7 segmentos
     BCDtoSSeg seg (
         .BCD(bcd),
         .SSeg(SSeg),

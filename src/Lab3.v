@@ -1,37 +1,50 @@
+// Lab3.v (top-level)
 module Lab3 (
-    input clk,              // Reloj principal
-    input [7:0] A,          // Operando A (desde switches)
-    input [7:0] B,          // Operando B (desde switches)
-    input Sel,              // 0 = suma, 1 = resta (desde switch)
-    output [6:0] SSeg,      // Salida para display de 7 segmentos
-    output [3:0] an         // Anodos de displays (activo en bajo)
+    input        clk,       // reloj para multiplexar displays si fuera necesario
+    input        sel,       // sel = 0 suma, 1 resta
+    input  [7:0] SW_A,      // SW[7:0] → A[7:0]
+    input  [7:0] SW_B,      // SW[15:8] → B[7:0] (ajusta según tu placa)
+    output [6:0] HEX3,      // dígito centena
+    output [6:0] HEX2,      // dígito decena
+    output [6:0] HEX1,      // dígito unidad
+    output [6:0] HEX0       // signo
 );
 
-    wire [8:0] resultado;
+    wire [8:0] S9;
+    wire       negative;
+    wire [7:0] magnitude;
+    wire [3:0] d_hund, d_tens, d_ones;
 
-    // === DEBUG: Asegúrate de que los switches están bien cableados ===
-    // Puedes usar esta línea con LEDs si tienes:
-    // assign debug_leds = A; // o B, o resultado[7:0]
-
-    // === OJO: Si tu switch Sel es ACTIVO EN BAJO, usa esto: ===
-    wire Sel_real = ~Sel;
-
-    // === Instanciar el sumador estructural con signo ===
-    // Este módulo usa sumres8b y entrega resultado de 9 bits (complemento a 2)
-    Sumador9b alu (
-        .A(A),               // A entra directamente (sin inversión)
-        .B(B),               // B entra directamente (sin inversión)
-        .Sel(Sel_real),      // Forzar suma/resta desde switch
-        .resultado(resultado)
+    // Instancio el sumador/restador
+    sum8b U1 (
+      .A  (SW_A),
+      .B  (SW_B),
+      .sel(sel),
+      .S  (S9)
     );
 
-    // === Display: visualiza el número con signo ===
-    // Este módulo toma el resultado, detecta el signo y convierte a BCD
-    Display visor (
-        .clk(clk),           // reloj para multiplexación
-        .resultado(resultado), // número firmado a mostrar
-        .SSeg(SSeg),         // salidas para segmentos
-        .an(an)              // selección de display activo
+    // Determino signo y magnitud absoluta
+    assign negative  = S9[8];
+    assign magnitude = negative ? (~S9[7:0] + 1) : S9[7:0];
+
+    // BCD de la magnitud (máx 256 → tres dígitos)
+    // Asumo que tu BCD.v acepta un vector de hasta 10 bits y sale 4 dígitos:
+    BCD #(.WIDTH(8)) U2 (
+      .binary_in (magnitude),
+      .BCD_hund  (d_hund),
+      .BCD_tens  (d_tens),
+      .BCD_ones  (d_ones)
     );
+
+    // Convierto cada nibble BCD a segmentos 7-segmentos
+    BCDtoSSeg H3 (.BCD(d_hund), .SS(HEX3));
+    BCDtoSSeg H2 (.BCD(d_tens), .SS(HEX2));
+    BCDtoSSeg H1 (.BCD(d_ones), .SS(HEX1));
+
+    // Para el dígito de signo muestro “–” o en blanco (“ ”)
+    // Asumo que BCDtoSSeg acepta un código especial para “–”:
+    wire [3:0] sign_code = negative ? 4'hA : 4'hF;  
+    // (puedes mapear 0xA=”–” y 0xF=espacio en BCDtoSSeg)
+    BCDtoSSeg H0 (.BCD(sign_code), .SS(HEX0));
 
 endmodule

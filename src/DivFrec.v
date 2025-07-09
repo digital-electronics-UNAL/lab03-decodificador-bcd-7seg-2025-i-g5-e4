@@ -1,13 +1,10 @@
-module DivFrec(
-    input clk,
+module DivFrec (
+    input  clk,
     output reg clk_out
 );
-
-    reg [19:0] count = 0;
-
+    reg [15:0] cnt = 0;
     always @(posedge clk) begin
-        count <= count + 1;
-        clk_out <= count[16];
+        cnt     <= cnt + 1;
+        clk_out <= cnt[15];
     end
-
 endmodule

@@ -1,44 +1,50 @@
-// Display.v — Convierte resultado 9-bit a BCD y muestra con signo (common-anode)
 module Display (
-    input        Sel_op,        // 0 = suma, 1 = resta
-    input  [8:0] resultado,     // [8]=carry/bit signo, [7:0]=magnitud
-    input  [1:0] sel_disp,      // selección de dígito (00: U, 01: signo, 10: C, 11: D)
-    output [6:0] SSeg           // segmentos del 7-seg (0 = encendido)
+    input clk,
+    input [8:0] resultado,     // [8] = signo, [7:0] = magnitud
+    output [6:0] SSeg,
+    output [3:0] an
 );
 
-    // Determina si hay signo negativo (resta con MSB=1)
-    wire signo = Sel_op & resultado[8];
+    wire signo = resultado[8];
+    wire [8:0] magnitud = signo ? (~resultado + 1'b1) : resultado;
 
-    // Calcula magnitud: si negativo, two’s-complement; si no, valor directo
-    wire [8:0] mag = signo
-        ? (~resultado + 9'd1)
-        : resultado;
+    wire [3:0] BCD0, BCD1, BCD2;
+    wire [1:0] sel_disp;
+    reg [3:0] bcd;
 
-    // Bin→BCD (3 dígitos: centenas, decenas, unidades)
-    wire [3:0] BCD2, BCD1, BCD0;
-    BCD u_bcd (
-        .bin  (mag),
-        .BCD2 (BCD2),
-        .BCD1 (BCD1),
-        .BCD0 (BCD0)
+    // Conversión binario a BCD (usa 9 bits completos)
+    BCD conversor (
+        .bin(magnitud),
+        .BCD0(BCD0),
+        .BCD1(BCD1),
+        .BCD2(BCD2)
     );
 
-    // Elige qué muestra cada ciclo de multiplexado
-    reg [3:0] bcd;
+    // Divisor de frecuencia para multiplexación
+    wire clk_div;
+    DivFrec div_clk (
+        .clk(clk),
+        .clk_out(clk_div)
+    );
+
+    SelAn seleccion (
+        .clk(clk_div),
+        .sel(sel_disp),
+        .an(an)
+    );
+
     always @(*) begin
         case (sel_disp)
-            2'b00: bcd = BCD0;                  // U
-            2'b01: bcd = signo ? 4'd10 : 4'd11; // '-'(10) o blank(11)
-            2'b10: bcd = BCD2;                  // C
-            2'b11: bcd = BCD1;                  // D
-            default: bcd = 4'd11;
+            2'b00: bcd = BCD0;                      // unidades
+            2'b01: bcd = signo ? 4'd10 : 4'd11;     // 10 = "-", 11 = blanco
+            2'b10: bcd = BCD2;                      // centenas
+            2'b11: bcd = BCD1;                      // decenas
         endcase
     end
 
-    // Mapa BCD→7-Seg (common-anode: 0 enciende)
-    BCDtoSSeg u_map (
-        .BCD  (bcd),
-        .SSeg (SSeg)
+    BCDtoSSeg seg (
+        .BCD(bcd),
+        .SSeg(SSeg)
     );
 
 endmodule

@@ -1,21 +1,29 @@
-module BCD (
-    input  [8:0] bin,
-    output reg [3:0] BCD2, BCD1, BCD0
+module BCD(
+    input [8:0] bin,
+    output reg [3:0] BCD2,
+    output reg [3:0] BCD1,
+    output reg [3:0] BCD0
 );
     integer i;
-    reg [19:0] shift;
+    reg [20:0] shift_reg;
 
     always @(*) begin
-        shift = 0;
-        shift[8:0] = bin;
+        shift_reg = 21'd0;
+        shift_reg[8:0] = bin;
+
         for (i = 0; i < 9; i = i + 1) begin
-            if (shift[11:8]  >= 4'd5)  shift[11:8]  = shift[11:8]  + 4'd3;
-            if (shift[15:12] >= 4'd5)  shift[15:12] = shift[15:12] + 4'd3;
-            if (shift[19:16] >= 4'd5)  shift[19:16] = shift[19:16] + 4'd3;
-            shift = shift << 1;
+            if (shift_reg[11:8] >= 5)
+                shift_reg[11:8] = shift_reg[11:8] + 3;
+            if (shift_reg[15:12] >= 5)
+                shift_reg[15:12] = shift_reg[15:12] + 3;
+            if (shift_reg[19:16] >= 5)
+                shift_reg[19:16] = shift_reg[19:16] + 3;
+
+            shift_reg = shift_reg << 1;
         end
-        BCD2 = shift[19:16];
-        BCD1 = shift[15:12];
-        BCD0 = shift[11:8];
+
+        BCD0 = shift_reg[11:8];
+        BCD1 = shift_reg[15:12];
+        BCD2 = shift_reg[19:16];
     end
 endmodule

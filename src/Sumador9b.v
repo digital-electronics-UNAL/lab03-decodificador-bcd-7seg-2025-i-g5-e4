@@ -1,13 +1,21 @@
 module Sumador9b (
     input  [7:0] A,
     input  [7:0] B,
-    input        Sel,         // 0 = A+B, 1 = A–B
-    output reg [8:0] resultado
+    input        Sel,         // 0 = suma, 1 = resta
+    output [8:0] resultado
 );
-    always @(*) begin
-        if (Sel)
-            resultado = A - B;  // resta (two’s-complement implícito)
-        else
-            resultado = A + B;  // suma completa con carry
-    end
+
+    wire [7:0] S;
+    wire Cout;
+
+    sumres8b u_sumres (
+        .A(A),
+        .B(B),
+        .Sel(Sel),
+        .S(S),
+        .Cout(Cout)
+    );
+
+    assign resultado = {S[7], S};  // MSB como bit de signo
+
 endmodule

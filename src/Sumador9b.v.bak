@@ -1,7 +1,7 @@
 module Sumador9b (
-    input  [7:0] A,
-    input  [7:0] B,
-    input        Sel,         // 0 = suma, 1 = resta
+    input [7:0] A,
+    input [7:0] B,
+    input Sel,
     output [8:0] resultado
 );
 
@@ -16,6 +16,7 @@ module Sumador9b (
         .Cout(Cout)
     );
 
-    assign resultado = {S[7], S};  // MSB como bit de signo
+    // ✅ Usar MSB como signo: S[7]
+    assign resultado = {S[7], S};
 
 endmodule

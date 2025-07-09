@@ -6,22 +6,18 @@ module sumres8b (
     output       Cout
 );
 
-    wire [7:0] B_xor_Sel;
-    wire [7:0] Sn;
-    wire Coutn;
+    wire [7:0] result;
+    wire carry;
 
-    assign B_xor_Sel = B ^ {8{Sel}};
-
-    sum8b sumador (
+    sum8b u_sum8b (
         .A(A),
-        .B(B_xor_Sel),
-        .Ci(Sel),  // Esto se conecta como CarryIn (Ci)
-        .S(Sn),
-        .Cout(Coutn)
+        .B(B),
+        .Sel(Sel),
+        .S(result),
+        .Cout(carry)
     );
 
-    // ✅ Invertir solo si Sel = 1 (resta), como debe ser
-    assign S    = Sel ? ~Sn    : Sn;
-    assign Cout = Sel ? ~Coutn : Coutn;
+    assign S = result;
+    assign Cout = carry;
 
 endmodule

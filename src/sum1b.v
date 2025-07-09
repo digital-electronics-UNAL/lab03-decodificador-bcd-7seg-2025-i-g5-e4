@@ -1,19 +1,20 @@
-module sum1b (
-    input A, 
-    input B, 
-    input Cin,
+module sum1b(
+
+    input  A, 
+    input  B,
+    input  Ci,
     output Cout,
     output S
   );
   
-    wire a_ab;
-    wire x_ab;
-    wire cout_t;
+    reg [1:0] st;
+
   
-    and(a_ab,A,B); 
-    xor(S,x_ab,Cin);
-    xor(x_ab,A,B);
-    and(cout_t,x_ab,Cin);
-    or (Cout,cout_t,a_ab);
-  
+    always @ ( * ) begin
+      st  =   A+B+Ci;
+    end
+
+    assign S = st[0];
+    assign Cout = st[1];
+    
   endmodule

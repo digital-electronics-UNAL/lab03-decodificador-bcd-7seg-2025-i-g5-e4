@@ -97,6 +97,31 @@ Usa el módulo BCDtoSSeg para convertir DIP_BCD en señal para display y control
 ### Representación decimal de números negativos
 #### Descripción
 
+- Módulo sum1b: Sumador de 1 bit
+##### Descripción estructural:
+A, B: bits de entrada.
+Cin: bit de acarreo de entrada.
+S: suma de 1 bit.
+Cout: acarreo de salida.
+##### Descripción comportamental
+Este módulo implementa un sumador completo de 1 bit utilizando compuertas lógicas básicas.
+
+- Módulo sum8b: Sumador de 8 bits
+##### Descripción estructural:
+Este módulo utiliza 8 instancias del sumador de 1 bit (sum1b) para sumar dos números de 8 bits.
+##### Descripción comportamental
+Realiza suma binaria A + B + Ci, propagando el acarreo bit a bit con un arreglo de carry[6:0].
+
+- Módulo sumres8b: Suma o resta de 8 bits con selección
+Este módulo combina suma y resta dependiendo del valor de Sel.
+##### Descripción estructural:
+B_xor_Sel = B ^ {8{Sel}}: si Sel = 0, se mantiene B; si Sel = 1, se obtiene ~B.
+Ci = Sel: si Sel = 1, se suma 1 => operación A + (~B) + 1 = A - B (complemento a dos).
+Luego, si es resta (Sel=1), se invierte el resultado final: ~Sn.
+
+##### Descripción comportamental
+Si Sel = 0: S = A + B
+Si Sel = 1: S = A - B
 #### Diagramas
 
 

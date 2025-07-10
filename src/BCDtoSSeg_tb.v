@@ -14,8 +14,6 @@ module BCDtoSSeg_tb();
     initial begin
         $dumpfile("BCDtoSSeg_tb.vcd");
         $dumpvars(0, BCDtoSSeg_tb);
-
-        // Prueba todos los dígitos y el guion
         BCD_tb = 4'd0;  #10;
         BCD_tb = 4'd1;  #10;
         BCD_tb = 4'd2;  #10;

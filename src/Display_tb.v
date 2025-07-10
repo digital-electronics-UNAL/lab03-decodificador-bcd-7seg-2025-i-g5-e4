@@ -16,7 +16,6 @@ module Display_tb();
         .an(an_tb)
     );
 
-    // Opcional: Forzar el clk si quieres ver el cambio automático de dígitos.
     always #5 clk_tb = ~clk_tb;
 
     initial begin
@@ -50,8 +49,6 @@ module Display_tb();
         // Caso 7: -255 (esperado: -255)
         resultado_tb = -9'sd255;
         #40;
-
-        // Fin
         $finish;
     end
 

@@ -25,8 +25,6 @@ module BCD_tb();
         bin_tb = 9'd255;  #10;  // 255 → 2 5 5
         bin_tb = 9'd256;  #10;  // 256 → 2 5 6
         bin_tb = 9'd510;  #10;  // 510 → 5 1 0
-
-        // Para negativos: pásale la magnitud
         bin_tb = 9'd2;    #10;  // -2 (magnitud) → 0 0 2
         bin_tb = 9'd127;  #10;  // -127 (magnitud) → 1 2 7
 

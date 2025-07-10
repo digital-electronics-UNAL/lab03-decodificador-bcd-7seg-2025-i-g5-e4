@@ -1,3 +1,6 @@
+`include "src/BCD.v"
+`include "src/DivFrec.v"
+`include "src/SelAn.v"
 module Display (
     input clk,
     input [8:0] resultado,   // [8]=signo, [7:0]=magnitud
@@ -30,7 +33,7 @@ module Display (
         .an(an)
     );
 
-    // Este orden asegura: -002, y 0 para 0-0.
+    
     always @(*) begin
         case (sel_disp)
             2'b00: bcd = BCD0;                      // unidades (derecha)

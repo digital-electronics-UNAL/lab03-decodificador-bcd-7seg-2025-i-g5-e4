@@ -1,6 +1,6 @@
 module Display (
     input clk,
-    input [8:0] resultado,     // [8]=signo, [7:0]=magnitud (complemento a dos)
+    input [8:0] resultado,   // [8]=signo, [7:0]=magnitud
     output [6:0] SSeg,
     output [3:0] an
 );
@@ -11,7 +11,6 @@ module Display (
     wire [1:0] sel_disp;
     reg [3:0] bcd;
 
-    // Conversión binario a BCD
     BCD conversor (
         .bin(mag),
         .BCD2(BCD2),
@@ -19,7 +18,6 @@ module Display (
         .BCD0(BCD0)
     );
 
-    // Multiplexado de displays
     wire clk_div;
     DivFrec div_clk (
         .clk(clk),
@@ -32,16 +30,15 @@ module Display (
         .an(an)
     );
 
+    // Este orden asegura: -002, y 0 para 0-0.
     always @(*) begin
-    case (sel_disp)
-        2'b00: bcd = BCD0;                      // unidades (display derecha)
-        2'b11: bcd = BCD1;                      // decenas
-        2'b10: bcd = BCD2;                      // centenas
-        2'b01: bcd = signo ? 4'd10 : 4'd11;     // signo (display izquierda)
-    endcase
-end
-
-
+        case (sel_disp)
+            2'b00: bcd = BCD0;                      // unidades (derecha)
+            2'b11: bcd = BCD1;                      // decenas
+            2'b10: bcd = BCD2;                      // centenas
+            2'b01: bcd = signo ? 4'd10 : 4'd11;     // signo (izquierda)
+        endcase
+    end
 
     BCDtoSSeg seg (
         .BCD(bcd),

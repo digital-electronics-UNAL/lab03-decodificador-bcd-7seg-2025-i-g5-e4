@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-`include "Lab3.v"
+`include "src/Lab3.v"
 
 module Lab3_tb();
 

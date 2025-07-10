@@ -1,5 +1,5 @@
-`include "src/Display.v"
-`include "src/Sumador9b.v"
+//`include "src/Display.v"
+//`include "src/Sumador9b.v"
 module Lab3 (
     input clk,
     input [7:0] A,

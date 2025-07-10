@@ -1,12 +1,16 @@
-**** module/scope: BCDtoSSeg
+**** module/scope: sumres8b
      Flip-Flops   : 0
-     Logic Gates  : 0
-     LPM[5]: 1 unaccounted
+     Logic Gates  : 36
+     ADDER[9]: 1 units
+     MUX[2]: 9 slices
+     LPM[8]: 1 unaccounted
      LOG[13]: 1 unaccounted
      LOG[14]: 1 unaccounted
 **** TOTALS
      Flip-Flops   : 0
-     Logic Gates  : 0
-     LPM[5]: 1 unaccounted
+     Logic Gates  : 36
+     ADDER[9]: 1 units
+     MUX[2]: 9 slices
+     LPM[8]: 1 unaccounted
      LOG[13]: 1 unaccounted
      LOG[14]: 1 unaccounted

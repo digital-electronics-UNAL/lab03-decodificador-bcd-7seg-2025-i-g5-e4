@@ -1,3 +1,4 @@
+//`include "src/sumres8b.v"
 module Sumador9b (
     input  [7:0] A,
     input  [7:0] B,

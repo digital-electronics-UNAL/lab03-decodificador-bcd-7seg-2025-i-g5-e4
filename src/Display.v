@@ -33,12 +33,13 @@ module Display (
     );
 always @(*) begin
     case (sel_disp)
-        2'b00: bcd = signo ? 4'd10 : 4'd11; // Display izquierdo: signo ("-" o blanco)
-        2'b01: bcd = BCD2;                  // centenas
-        2'b10: bcd = BCD1;                  // decenas
-        2'b11: bcd = BCD0;                  // unidades
+        2'b00: bcd = BCD0;                      // unidades (display derecho)
+        2'b01: bcd = BCD1;                      // decenas
+        2'b10: bcd = BCD2;                      // centenas
+        2'b11: bcd = signo ? 4'd10 : 4'd11;     // signo (display izquierdo)
     endcase
 end
+
 
 
     BCDtoSSeg seg (

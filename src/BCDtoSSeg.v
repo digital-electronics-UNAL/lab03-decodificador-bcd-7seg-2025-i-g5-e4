@@ -14,7 +14,7 @@ module BCDtoSSeg (
             4'd7:  SSeg = 7'b0001111; // 7
             4'd8:  SSeg = 7'b0000000; // 8
             4'd9:  SSeg = 7'b0000100; // 9
-            4'd10: SSeg = 7'b0111111; // "-" (signo negativo)
+            4'd10: SSeg = 7'b1111110; // "-" (signo negativo)
             4'd11: SSeg = 7'b1111111; // blanco
             default: SSeg = 7'b1111111;
         endcase

@@ -27,7 +27,7 @@ module Lab3 (
 
   // 3) Sumador/restador en 9 bits (signed)
   wire signed [8:0] result9;
-  sum8b_signed u_sum (
+  sum8b u_sum (
     .A   (SW_A),
     .B   (SW_B),
     .sel (~KEY0),      // ajusta inversión si es necesario

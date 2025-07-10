@@ -10,6 +10,7 @@ module Display (
 );
     wire signo = resultado[8];
     wire [8:0] magnitud = signo ? (~resultado + 1'b1) : resultado;
+    wire mostrar_signo = signo && (magnitud != 0); // solo muestra guion si magnitud != 0
 
     wire [3:0] BCD0, BCD1, BCD2;
     wire [1:0] sel_disp;
@@ -40,7 +41,7 @@ module Display (
             2'b00: bcd = BCD0;                      // unidades (derecha)
             2'b11: bcd = BCD1;                      // decenas
             2'b10: bcd = BCD2;                      // centenas
-            2'b01: bcd = signo ? 4'd10 : 4'd11;     // signo (izquierda)
+            2'b01: bcd = mostrar_signo ? 4'd10 : 4'd11;     // signo (izquierda)
         endcase
     end
 

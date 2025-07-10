@@ -32,15 +32,15 @@ module Display (
         .an(an)
     );
 
-    // **¡¡Este es el orden correcto para tu caso!!**
     always @(*) begin
-        case (sel_disp)
-            2'b00: bcd = BCD0;                      // unidades (derecha)
-            2'b01: bcd = BCD1;                      // decenas
-            2'b10: bcd = BCD2;                      // centenas
-            2'b11: bcd = signo ? 4'd10 : 4'd11;     // signo (izquierda)
-        endcase
-    end
+    case (sel_disp)
+        2'b00: bcd = signo ? 4'd10 : 4'd11; // signo (izquierda)
+        2'b01: bcd = BCD2;                  // centenas
+        2'b10: bcd = BCD1;                  // decenas
+        2'b11: bcd = BCD0;                  // unidades (derecha)
+    endcase
+end
+
 
     BCDtoSSeg seg (
         .BCD(bcd),

@@ -7,9 +7,9 @@ module sumres8b (
     reg signed [8:0] tmp;
     always @(*) begin
         if (Sel)
-            tmp = $signed(A) - $signed(B);
+            tmp = A - B; 
         else
-            tmp = $signed(A) + $signed(B);
+            tmp = A + B;
     end
     assign resultado = tmp;
 endmodule

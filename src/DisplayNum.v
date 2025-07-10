@@ -1,6 +1,6 @@
 module DisplayNum (
     input clk,
-    input [8:0] valor, // siempre positivo, 0 a 255
+    input [7:0] valor, // siempre positivo, 0 a 255
     output [6:0] SSeg,
     output [3:0] an
 );

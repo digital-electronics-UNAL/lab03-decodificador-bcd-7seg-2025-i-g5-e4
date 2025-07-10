@@ -17,7 +17,7 @@ module Display (
     reg [3:0] bcd;
 
     BCD conversor (
-        .bin(mag),
+        .bin(magnitud),
         .BCD2(BCD2),
         .BCD1(BCD1),
         .BCD0(BCD0)

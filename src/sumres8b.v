@@ -5,19 +5,14 @@ module sumres8b (
     output [7:0] S,
     output       Cout
 );
-
-    wire [7:0] result;
-    wire carry;
-
-    sum8b u_sum8b (
-        .A(A),
-        .B(B),
-        .Sel(Sel),
-        .S(result),
-        .Cout(carry)
-    );
-
-    assign S = result;
-    assign Cout = carry;
-
+    reg [8:0] tmp;
+    always @(*) begin
+        if (Sel)
+            tmp = {1'b0, A} - {1'b0, B}; // resta en 9 bits
+        else
+            tmp = {1'b0, A} + {1'b0, B}; // suma en 9 bits
+    end
+    assign S = tmp[7:0];
+    assign Cout = tmp[8]; // carry/borrow out
 endmodule
+

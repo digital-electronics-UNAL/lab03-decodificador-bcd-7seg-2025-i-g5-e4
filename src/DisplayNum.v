@@ -1,6 +1,6 @@
 module DisplayNum (
     input clk,
-    input [7:0] valor, // siempre positivo, 0 a 255
+    input [8:0] valor,
     output [6:0] SSeg,
     output [3:0] an
 );
@@ -8,7 +8,7 @@ module DisplayNum (
     wire [1:0] sel_disp;
     reg [3:0] bcd;
 
-    // Conversión binario a BCD
+   
     BCD conversor (
         .bin(valor),
         .BCD2(BCD2),

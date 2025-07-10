@@ -4,12 +4,12 @@
 //`include "src/BCDtoSSeg.v"
 module Display (
     input clk,
-    input [8:0] resultado,   // [8]=signo, [7:0]=magnitud
+    input signed [8:0] resultado,   // [8]=signo, [7:0]=magnitud
     output [6:0] SSeg,
     output [3:0] an
 );
     wire signo = resultado[8];
-    wire [8:0] mag = signo ? (~resultado + 1'b1) : resultado;
+    wire [8:0] magnitud = signo ? (~resultado + 1'b1) : resultado;
 
     wire [3:0] BCD0, BCD1, BCD2;
     wire [1:0] sel_disp;

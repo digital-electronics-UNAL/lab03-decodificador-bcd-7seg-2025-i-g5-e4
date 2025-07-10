@@ -1,20 +1,16 @@
-module sum8b (
-    input  [7:0] A,
-    input  [7:0] B,
-    input        Sel,     // 0 = suma, 1 = resta
-    output [7:0] S,
-    output       Cout
+// sum8b_signed.v
+module sum8b(
+  input  wire [7:0] A,
+  input  wire [7:0] B,
+  input  wire       sel,     // 0 = A+B, 1 = A–B
+  output wire signed [8:0] result
 );
-    reg [8:0] tmp;
+  // Extiende a 9 bits e interpreta en two’s-complement
+  wire signed [8:0] sA = {1'b0, A};
+  wire signed [8:0] sB = {1'b0, B};
 
-    always @(*) begin
-        if (Sel)
-            tmp = A - B;
-        else
-            tmp = A + B;
-    end
-
-    assign S = tmp[7:0];
-    assign Cout = tmp[8];
-
+  // Suma o resta en 9 bits con signo
+  assign result = (sel)
+                  ? (sA - sB)
+                  : (sA + sB);
 endmodule

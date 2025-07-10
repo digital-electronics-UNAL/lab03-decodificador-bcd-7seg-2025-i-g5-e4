@@ -1,6 +1,7 @@
 `include "src/BCD.v"
 `include "src/DivFrec.v"
 `include "src/SelAn.v"
+`include "src/BCDtoSSeg.v"
 module Display (
     input clk,
     input [8:0] resultado,   // [8]=signo, [7:0]=magnitud

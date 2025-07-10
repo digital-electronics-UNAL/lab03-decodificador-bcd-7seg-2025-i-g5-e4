@@ -7,19 +7,13 @@ module Lab3 (
     input Sel_fpga,
     output [6:0] SSeg,
     output [3:0] an,
-    output [7:0] debug_A,
-    output [7:0] debug_B,
-    output debug_Sel
+    
 );
 
     wire [7:0] A = {~A_fpga[7], ~A_fpga[6], ~A_fpga[5], ~A_fpga[4], ~A_fpga[3], ~A_fpga[2], ~A_fpga[1], ~A_fpga[0]};
     wire [7:0] B = {~B_fpga[7], ~B_fpga[6], ~B_fpga[5], ~B_fpga[4], ~B_fpga[3], ~B_fpga[2], ~B_fpga[1], ~B_fpga[0]};
     wire Sel = ~Sel_fpga;
     wire [8:0] resultado;
-
-    assign debug_A = A;
-    assign debug_B = B;
-    assign debug_Sel = Sel;
 
     Sumador9b alu (
         .A(A),
